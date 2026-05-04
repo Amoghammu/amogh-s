@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>NutriLife — Healthy Eating</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --green-dark:  #1a3c2b;
+    --green-mid:   #2e6b45;
+    --green-light: #4caf78;
+    --green-pale:  #d6eedf;
+    --cream:       #f9f5ee;
+    --warm-white:  #fffdf8;
+    --accent:      #e8a830;
+    --accent-light:#fdf0d0;
+    --text-dark:   #1a1a1a;
+    --text-mid:    #4a4a4a;
+    --text-light:  #8a9890;
+    --radius-lg:   24px;
+    --radius-md:   16px;
+    --radius-sm:   10px;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--warm-white);
+    color: var(--text-dark);
+    overflow-x: hidden;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 20px 60px;
+    background: rgba(249,245,238,.92);
+    backdrop-filter: blur(14px);
+    border-bottom: 1px solid rgba(78,175,120,.15);
+  }
+  .logo {
+    font-family: 'Fraunces', serif;
+    font-size: 24px; font-weight: 700;
+    color: var(--green-dark);
+    display: flex; align-items: center; gap: 8px;
+  }
+  .logo span { color: var(--green-light); }
+  .logo-dot {
+    width: 10px; height: 10px; border-radius: 50%;
+    background: var(--accent); flex-shrink: 0;
+  }
+  nav ul {
+    display: flex; gap: 36px; list-style: none;
+  }
+  nav ul a {
+    text-decoration: none; font-size: 15px;
+    color: var(--text-mid); font-weight: 500;
+    transition: color .2s;
+  }
+  nav ul a:hover { color: var(--green-mid); }
+  .nav-btn {
+    background: var(--green-dark); color: #fff;
+    border: none; padding: 12px 28px;
+    border-radius: 50px; font-size: 14px; font-weight: 600;
+    cursor: pointer; transition: background .2s, transform .15s;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .nav-btn:hover { background: var(--green-mid); transform: translateY(-1px); }
+
+  /* ── HERO ── */
+  .hero {
+    padding: 140px 60px 80px;
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 60px; align-items: center;
+    min-height: 100vh;
+    background: radial-gradient(ellipse at 70% 30%, rgba(76,175,120,.12) 0%, transparent 60%),
+                radial-gradient(ellipse at 10% 80%, rgba(232,168,48,.08) 0%, transparent 50%),
+                var(--cream);
+  }
+  .hero-text h1 {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(44px, 5vw, 72px);
+    line-height: 1.1;
+    color: var(--green-dark);
+    margin-bottom: 24px;
+  }
+  .hero-text h1 em {
+    font-style: italic; color: var(--green-light);
+  }
+  .hero-text p {
+    font-size: 17px; line-height: 1.7;
+    color: var(--text-mid); max-width: 460px; margin-bottom: 40px;
+  }
+  .hero-actions { display: flex; gap: 16px; align-items: center; }
+  .btn-primary {
+    background: var(--green-dark); color: #fff;
+    padding: 16px 36px; border-radius: 50px;
+    font-size: 15px; font-weight: 600;
+    text-decoration: none; display: inline-block;
+    transition: background .2s, transform .15s, box-shadow .2s;
+    box-shadow: 0 8px 24px rgba(26,60,43,.25);
+  }
+  .btn-primary:hover { background: var(--green-mid); transform: translateY(-2px); box-shadow: 0 12px 32px rgba(26,60,43,.3); }
+  .btn-secondary {
+    color: var(--green-dark); font-size: 15px; font-weight: 600;
+    display: flex; align-items: center; gap: 8px;
+    text-decoration: none; transition: gap .2s;
+  }
+  .btn-secondary:hover { gap: 14px; }
+  .btn-secondary::after { content: '→'; font-size: 18px; }
+
+  /* Hero visual */
+  .hero-visual {
+    position: relative; display: flex; justify-content: center;
+  }
+  .hero-card {
+    background: #fff;
+    border-radius: var(--radius-lg);
+    padding: 28px;
+    box-shadow: 0 24px 64px rgba(26,60,43,.12);
+    max-width: 440px; width: 100%;
+    position: relative;
+  }
+  .hero-card-img {
+    width: 100%; height: 260px;
+    border-radius: var(--radius-md);
+    object-fit: cover;
+    background: linear-gradient(135deg, #c8e6c9, #a5d6a7);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 80px; margin-bottom: 20px;
+    overflow: hidden;
+  }
+  .meal-emoji { font-size: 90px; }
+  .hero-card h3 {
+    font-family: 'Fraunces', serif; font-size: 22px;
+    color: var(--green-dark); margin-bottom: 8px;
+  }
+  .hero-card p { font-size: 14px; color: var(--text-light); margin-bottom: 16px; }
+  .macros {
+    display: flex; gap: 12px;
+  }
+  .macro {
+    flex: 1; background: var(--cream);
+    border-radius: var(--radius-sm); padding: 10px;
+    text-align: center;
+  }
+  .macro strong { display: block; font-size: 18px; font-weight: 700; color: var(--green-dark); }
+  .macro span { font-size: 11px; color: var(--text-light); text-transform: uppercase; letter-spacing: .5px; }
+
+  .badge-float {
+    position: absolute;
+    background: var(--accent-light); border: 2px solid var(--accent);
+    border-radius: 50px; padding: 10px 18px;
+    font-size: 13px; font-weight: 600; color: var(--green-dark);
+    display: flex; align-items: center; gap: 6px;
+    box-shadow: 0 4px 16px rgba(232,168,48,.2);
+  }
+  .badge-float.top-right {
+    top: -20px; right: -20px;
+  }
+  .badge-float.bottom-left {
+    bottom: 30px; left: -30px;
+  }
+
+  /* ── STATS ── */
+  .stats {
+    background: var(--green-dark);
+    padding: 60px;
+    display: flex; gap: 0; 
+  }
+  .stat {
+    flex: 1; text-align: center; padding: 20px;
+    border-right: 1px solid rgba(255,255,255,.1);
+  }
+  .stat:last-child { border-right: none; }
+  .stat strong {
+    display: block; font-family: 'Fraunces', serif;
+    font-size: 52px; color: var(--green-light);
+    line-height: 1;
+  }
+  .stat p { font-size: 14px; color: rgba(255,255,255,.6); margin-top: 6px; }
+
+  /* ── SECTION BASE ── */
+  section { padding: 100px 60px; }
+  .section-label {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: var(--green-pale); color: var(--green-mid);
+    border-radius: 50px; padding: 6px 16px;
+    font-size: 13px; font-weight: 600; letter-spacing: .5px;
+    text-transform: uppercase; margin-bottom: 20px;
+  }
+  .section-label::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--green-light); }
+  .section-title {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(32px, 4vw, 52px);
+    color: var(--green-dark); line-height: 1.2;
+    margin-bottom: 16px;
+  }
+  .section-sub {
+    font-size: 16px; color: var(--text-mid); max-width: 520px; line-height: 1.7;
+  }
+  .section-header { margin-bottom: 56px; }
+
+  /* ── MEAL PLANS ── */
+  .plans-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;
+  }
+  .plan-card {
+    background: #fff;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0,0,0,.06);
+    transition: transform .25s, box-shadow .25s;
+    cursor: pointer;
+  }
+  .plan-card:hover { transform: translateY(-6px); box-shadow: 0 16px 40px rgba(26,60,43,.12); }
+  .plan-card.featured {
+    background: var(--green-dark);
+    grid-row: span 1;
+  }
+  .plan-img {
+    height: 220px; width: 100%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 70px;
+  }
+  .plan-img.green-bg { background: linear-gradient(135deg,#c8e6c9,#81c784); }
+  .plan-img.orange-bg { background: linear-gradient(135deg,#ffe0b2,#ffb74d); }
+  .plan-img.purple-bg { background: linear-gradient(135deg,#e1bee7,#ba68c8); }
+  .plan-body { padding: 24px; }
+  .plan-tag {
+    display: inline-block;
+    font-size: 11px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 1px; padding: 4px 12px; border-radius: 50px;
+    margin-bottom: 12px;
+  }
+  .tag-green { background: var(--green-pale); color: var(--green-mid); }
+  .tag-orange { background: #fff3e0; color: #ef6c00; }
+  .tag-purple { background: #f3e5f5; color: #7b1fa2; }
+  .tag-white { background: rgba(255,255,255,.15); color: rgba(255,255,255,.9); }
+  .plan-body h3 {
+    font-family: 'Fraunces', serif; font-size: 20px;
+    color: var(--green-dark); margin-bottom: 8px;
+  }
+  .plan-card.featured .plan-body h3 { color: #fff; }
+  .plan-body p { font-size: 14px; color: var(--text-mid); line-height: 1.6; margin-bottom: 20px; }
+  .plan-card.featured .plan-body p { color: rgba(255,255,255,.65); }
+  .plan-meta {
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .plan-kcal { font-size: 13px; font-weight: 600; color: var(--text-light); }
+  .plan-card.featured .plan-kcal { color: rgba(255,255,255,.5); }
+  .plan-arrow {
+    width: 36px; height: 36px; border-radius: 50%;
+    background: var(--green-pale); color: var(--green-dark);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px; font-weight: bold;
+    transition: background .2s;
+  }
+  .plan-card.featured .plan-arrow { background: rgba(255,255,255,.15); color: #fff; }
+  .plan-card:hover .plan-arrow { background: var(--green-light); color: #fff; }
+
+  /* ── HOW IT WORKS ── */
+  .how-section { background: var(--cream); }
+  .steps {
+    display: grid; grid-template-columns: repeat(4,1fr); gap: 32px;
+  }
+  .step { position: relative; }
+  .step::after {
+    content: '→';
+    position: absolute; right: -20px; top: 28px;
+    color: var(--green-pale); font-size: 28px;
+  }
+  .step:last-child::after { display: none; }
+  .step-num {
+    width: 56px; height: 56px; border-radius: 50%;
+    background: var(--green-dark); color: #fff;
+    font-family: 'Fraunces', serif; font-size: 22px;
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 20px;
+  }
+  .step h4 {
+    font-family: 'Fraunces', serif; font-size: 20px;
+    color: var(--green-dark); margin-bottom: 10px;
+  }
+  .step p { font-size: 14px; color: var(--text-mid); line-height: 1.7; }
+
+  /* ── RECIPES ── */
+  .recipes-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 24px;
+  }
+  .recipe-card {
+    background: #fff; border-radius: var(--radius-lg);
+    overflow: hidden; display: flex;
+    box-shadow: 0 4px 20px rgba(0,0,0,.06);
+    transition: transform .25s, box-shadow .25s;
+    cursor: pointer;
+  }
+  .recipe-card:hover { transform: translateY(-4px); box-shadow: 0 16px 40px rgba(26,60,43,.1); }
+  .recipe-thumb {
+    width: 140px; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 54px;
+    background: var(--cream);
+  }
+  .recipe-info { padding: 20px; flex: 1; }
+  .recipe-info h4 {
+    font-family: 'Fraunces', serif; font-size: 18px;
+    color: var(--green-dark); margin-bottom: 6px;
+  }
+  .recipe-info p { font-size: 13px; color: var(--text-light); margin-bottom: 14px; }
+  .recipe-stats {
+    display: flex; gap: 14px;
+  }
+  .rst {
+    display: flex; align-items: center; gap: 4px;
+    font-size: 12px; color: var(--text-mid); font-weight: 500;
+  }
+  .rst-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green-light); }
+
+  /* ── TESTIMONIALS ── */
+  .testimonials-section { background: var(--green-dark); }
+  .testimonials-section .section-title { color: #fff; }
+  .testimonials-section .section-sub { color: rgba(255,255,255,.6); }
+  .testimonials-section .section-label { background: rgba(76,175,120,.2); color: var(--green-light); }
+  .testimonials-grid {
+    display: grid; grid-template-columns: repeat(3,1fr); gap: 24px;
+  }
+  .testi-card {
+    background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.1);
+    border-radius: var(--radius-lg); padding: 28px;
+    transition: background .2s;
+  }
+  .testi-card:hover { background: rgba(255,255,255,.1); }
+  .stars { color: var(--accent); font-size: 16px; margin-bottom: 16px; }
+  .testi-card blockquote {
+    font-size: 15px; color: rgba(255,255,255,.85);
+    line-height: 1.7; margin-bottom: 20px;
+    font-style: italic;
+  }
+  .testi-author { display: flex; align-items: center; gap: 12px; }
+  .testi-avatar {
+    width: 44px; height: 44px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px;
+    background: rgba(255,255,255,.1);
+    flex-shrink: 0;
+  }
+  .testi-name { font-weight: 600; font-size: 14px; color: #fff; }
+  .testi-role { font-size: 12px; color: rgba(255,255,255,.45); margin-top: 2px; }
+
+  /* ── CTA ── */
+  .cta-section {
+    text-align: center;
+    background: radial-gradient(ellipse at center, rgba(76,175,120,.1) 0%, transparent 70%), var(--cream);
+  }
+  .cta-section .section-title { max-width: 600px; margin: 0 auto 16px; }
+  .cta-section .section-sub { margin: 0 auto 40px; text-align: center; }
+  .cta-actions { display: flex; gap: 16px; justify-content: center; align-items: center; }
+  .btn-outline {
+    border: 2px solid var(--green-dark); color: var(--green-dark);
+    padding: 14px 32px; border-radius: 50px;
+    font-size: 15px; font-weight: 600; text-decoration: none;
+    transition: background .2s, color .2s;
+  }
+  .btn-outline:hover { background: var(--green-dark); color: #fff; }
+
+  /* ── FOOTER ── */
+  footer {
+    background: #0f1f16;
+    color: rgba(255,255,255,.55);
+    padding: 60px;
+    display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 40px;
+  }
+  .footer-brand .logo { color: #fff; margin-bottom: 14px; }
+  .footer-brand p { font-size: 14px; line-height: 1.7; max-width: 260px; }
+  .footer-col h5 {
+    font-size: 13px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 1px; color: #fff; margin-bottom: 18px;
+  }
+  .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+  .footer-col a {
+    color: rgba(255,255,255,.5); text-decoration: none; font-size: 14px;
+    transition: color .2s;
+  }
+  .footer-col a:hover { color: var(--green-light); }
+  .footer-bottom {
+    background: #0a1510; padding: 20px 60px;
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 13px; color: rgba(255,255,255,.3);
+  }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(28px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .anim { opacity: 0; animation: fadeUp .7s ease forwards; }
+  .delay-1 { animation-delay: .1s; }
+  .delay-2 { animation-delay: .22s; }
+  .delay-3 { animation-delay: .34s; }
+  .delay-4 { animation-delay: .46s; }
+  .delay-5 { animation-delay: .58s; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    nav { padding: 16px 24px; }
+    nav ul { display: none; }
+    .hero { grid-template-columns: 1fr; padding: 100px 24px 60px; }
+    .hero-visual { display: none; }
+    .stats { flex-direction: column; padding: 40px 24px; }
+    section { padding: 70px 24px; }
+    .plans-grid, .recipes-grid, .steps, .testimonials-grid { grid-template-columns: 1fr; }
+    footer { grid-template-columns: 1fr 1fr; padding: 40px 24px; }
+    .footer-bottom { padding: 16px 24px; flex-direction: column; gap: 8px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="logo">
+    <div class="logo-dot"></div>
+    Nutri<span>Life</span>
+  </div>
+  <ul>
+    <li><a href="#plans">Meal Plans</a></li>
+    <li><a href="#recipes">Recipes</a></li>
+    <li><a href="#how">How It Works</a></li>
+    <li><a href="#testimonials">Stories</a></li>
+  </ul>
+  <button class="nav-btn">Start Free</button>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-text">
+    <div class="section-label">🌿 Nutrition-first approach</div>
+    <h1 class="anim delay-1">Eat <em>well,</em><br>live fully.</h1>
+    <p class="anim delay-2">Personalized meal plans crafted by nutritionists. Real food, balanced macros, and recipes you'll actually love — delivered to your life.</p>
+    <div class="hero-actions anim delay-3">
+      <a href="#plans" class="btn-primary">Get my plan</a>
+      <a href="#how" class="btn-secondary">How it works</a>
+    </div>
+  </div>
+  <div class="hero-visual anim delay-2">
+    <div class="hero-card">
+      <div class="badge-float top-right">✨ Chef's pick today</div>
+      <div class="hero-card-img"><span class="meal-emoji">🥗</span></div>
+      <h3>Mediterranean Bowl</h3>
+      <p>Quinoa, roasted veggies, hummus & tahini dressing</p>
+      <div class="macros">
+        <div class="macro"><strong>487</strong><span>Calories</span></div>
+        <div class="macro"><strong>28g</strong><span>Protein</span></div>
+        <div class="macro"><strong>52g</strong><span>Carbs</span></div>
+        <div class="macro"><strong>18g</strong><span>Fat</span></div>
+      </div>
+      <div class="badge-float bottom-left">⏱ 25 min prep</div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats">
+  <div class="stat"><strong>50K+</strong><p>Happy members</p></div>
+  <div class="stat"><strong>300+</strong><p>Nutritionist-crafted recipes</p></div>
+  <div class="stat"><strong>12</strong><p>Meal plan programs</p></div>
+  <div class="stat"><strong>94%</strong><p>Reported feeling better in 4 weeks</p></div>
+</div>
+
+<!-- MEAL PLANS -->
+<section id="plans">
+  <div class="section-header">
+    <div class="section-label">Programs</div>
+    <h2 class="section-title">Plans built<br>for your goals</h2>
+    <p class="section-sub">Whether you want to lose weight, gain energy, or simply eat better — we have a plan that fits your lifestyle.</p>
+  </div>
+  <div class="plans-grid">
+    <div class="plan-card">
+      <div class="plan-img green-bg">🥦</div>
+      <div class="plan-body">
+        <span class="plan-tag tag-green">Plant-Based</span>
+        <h3>Green Vitality</h3>
+        <p>Whole plants, legumes & superfoods for maximum energy and gut health.</p>
+        <div class="plan-meta">
+          <span class="plan-kcal">1,800–2,000 kcal/day</span>
+          <div class="plan-arrow">→</div>
+        </div>
+      </div>
+    </div>
+    <div class="plan-card featured">
+      <div class="plan-img" style="background:linear-gradient(135deg,#2e6b45,#1a3c2b); font-size:80px;">🍳</div>
+      <div class="plan-body">
+        <span class="plan-tag tag-white">⭐ Most Popular</span>
+        <h3>Balanced Boost</h3>
+        <p>The perfect macro split for sustainable energy, fat loss, and mental clarity.</p>
+        <div class="plan-meta">
+          <span class="plan-kcal">2,000–2,200 kcal/day</span>
+          <div class="plan-arrow">→</div>
+        </div>
+      </div>
+    </div>
+    <div class="plan-card">
+      <div class="plan-img orange-bg">🍊</div>
+      <div class="plan-body">
+        <span class="plan-tag tag-orange">High-Protein</span>
+        <h3>Muscle & Fuel</h3>
+        <p>Protein-rich meals for athletes, gym-goers, and anyone building strength.</p>
+        <div class="plan-meta">
+          <span class="plan-kcal">2,400–2,800 kcal/day</span>
+          <div class="plan-arrow">→</div>
+        </div>
+      </div>
+    </div>
+    <div class="plan-card">
+      <div class="plan-img purple-bg">🫐</div>
+      <div class="plan-body">
+        <span class="plan-tag tag-purple">Anti-Inflammatory</span>
+        <h3>Calm & Restore</h3>
+        <p>Reduce bloating and inflammation with antioxidant-rich, soothing foods.</p>
+        <div class="plan-meta">
+          <span class="plan-kcal">1,600–1,900 kcal/day</span>
+          <div class="plan-arrow">→</div>
+        </div>
+      </div>
+    </div>
+    <div class="plan-card" style="background:var(--accent-light);">
+      <div class="plan-img" style="background:linear-gradient(135deg,#fff9e6,#ffe082); font-size:80px;">🥑</div>
+      <div class="plan-body">
+        <span class="plan-tag tag-orange">Low-Carb</span>
+        <h3>Keto Clarity</h3>
+        <p>Fat-adapted eating for sustained ketosis, mental sharpness and weight management.</p>
+        <div class="plan-meta">
+          <span class="plan-kcal">1,700–2,100 kcal/day</span>
+          <div class="plan-arrow">→</div>
+        </div>
+      </div>
+    </div>
+    <div class="plan-card">
+      <div class="plan-img" style="background:linear-gradient(135deg,#e8f5e9,#c8e6c9); font-size:80px;">🍜</div>
+      <div class="plan-body">
+        <span class="plan-tag tag-green">Mediterranean</span>
+        <h3>Heart & Soul</h3>
+        <p>The science-backed Mediterranean diet — delicious, heart-friendly, and timeless.</p>
+        <div class="plan-meta">
+          <span class="plan-kcal">1,900–2,300 kcal/day</span>
+          <div class="plan-arrow">→</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section id="how" class="how-section">
+  <div class="section-header">
+    <div class="section-label">Process</div>
+    <h2 class="section-title">From quiz to plate<br>in minutes</h2>
+    <p class="section-sub">Our smart system pairs your goals, preferences, and lifestyle with the perfect nutrition plan.</p>
+  </div>
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">1</div>
+      <h4>Take the quiz</h4>
+      <p>Tell us about your health goals, dietary preferences, and daily routine. Takes 3 minutes.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <h4>Get your plan</h4>
+      <p>We match you with a personalised weekly meal plan and shopping list — instantly.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <h4>Cook & enjoy</h4>
+      <p>Step-by-step recipes with photos, nutritional breakdown, and prep-time estimates.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">4</div>
+      <h4>Track & adjust</h4>
+      <p>Log meals, monitor macros, and get weekly plan updates as your body changes.</p>
+    </div>
+  </div>
+</section>
+
+<!-- RECIPES -->
+<section id="recipes">
+  <div class="section-header" style="display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:48px;">
+    <div>
+      <div class="section-label">Recipes</div>
+      <h2 class="section-title">Today's top picks</h2>
+    </div>
+    <a href="#" class="btn-secondary">See all recipes</a>
+  </div>
+  <div class="recipes-grid">
+    <div class="recipe-card">
+      <div class="recipe-thumb">🍋</div>
+      <div class="recipe-info">
+        <h4>Lemon Herb Salmon</h4>
+        <p>Pan-seared fillet with asparagus and lemon-butter sauce</p>
+        <div class="recipe-stats">
+          <span class="rst"><span class="rst-dot"></span> 520 kcal</span>
+          <span class="rst"><span class="rst-dot"></span> 42g protein</span>
+          <span class="rst"><span class="rst-dot"></span> 20 min</span>
+        </div>
+      </div>
+    </div>
+    <div class="recipe-card">
+      <div class="recipe-thumb">🍓</div>
+      <div class="recipe-info">
+        <h4>Berry Protein Smoothie</h4>
+        <p>Mixed berries, Greek yoghurt, oats & almond milk</p>
+        <div class="recipe-stats">
+          <span class="rst"><span class="rst-dot"></span> 310 kcal</span>
+          <span class="rst"><span class="rst-dot"></span> 26g protein</span>
+          <span class="rst"><span class="rst-dot"></span> 5 min</span>
+        </div>
+      </div>
+    </div>
+    <div class="recipe-card">
+      <div class="recipe-thumb">🌮</div>
+      <div class="recipe-info">
+        <h4>Black Bean Tacos</h4>
+        <p>Spiced beans, avocado, salsa & corn tortillas</p>
+        <div class="recipe-stats">
+          <span class="rst"><span class="rst-dot"></span> 430 kcal</span>
+          <span class="rst"><span class="rst-dot"></span> 18g protein</span>
+          <span class="rst"><span class="rst-dot"></span> 15 min</span>
+        </div>
+      </div>
+    </div>
+    <div class="recipe-card">
+      <div class="recipe-thumb">🥣</div>
+      <div class="recipe-info">
+        <h4>Golden Oat Bowl</h4>
+        <p>Turmeric oats with banana, walnuts & raw honey</p>
+        <div class="recipe-stats">
+          <span class="rst"><span class="rst-dot"></span> 380 kcal</span>
+          <span class="rst"><span class="rst-dot"></span> 14g protein</span>
+          <span class="rst"><span class="rst-dot"></span> 10 min</span>
+        </div>
+      </div>
+    </div>
+    <div class="recipe-card">
+      <div class="recipe-thumb">🫕</div>
+      <div class="recipe-info">
+        <h4>Lentil Veggie Stew</h4>
+        <p>Hearty red lentils with tomatoes, spinach & cumin</p>
+        <div class="recipe-stats">
+          <span class="rst"><span class="rst-dot"></span> 390 kcal</span>
+          <span class="rst"><span class="rst-dot"></span> 22g protein</span>
+          <span class="rst"><span class="rst-dot"></span> 30 min</span>
+        </div>
+      </div>
+    </div>
+    <div class="recipe-card">
+      <div class="recipe-thumb">🥙</div>
+      <div class="recipe-info">
+        <h4>Chicken Shawarma Wrap</h4>
+        <p>Spiced chicken, tzatziki, cucumber & warm flatbread</p>
+        <div class="recipe-stats">
+          <span class="rst"><span class="rst-dot"></span> 560 kcal</span>
+          <span class="rst"><span class="rst-dot"></span> 38g protein</span>
+          <span class="rst"><span class="rst-dot"></span> 25 min</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section id="testimonials" class="testimonials-section">
+  <div class="section-header" style="display:flex; gap:60px; justify-content:space-between; align-items:flex-end;">
+    <div>
+      <div class="section-label">Stories</div>
+      <h2 class="section-title">Real people,<br>real results</h2>
+    </div>
+    <p class="section-sub">Our members share how NutriLife changed their relationship with food and their bodies.</p>
+  </div>
+  <div class="testimonials-grid">
+    <div class="testi-card">
+      <div class="stars">★★★★★</div>
+      <blockquote>"I lost 8 kg in 3 months without feeling deprived. The meal plans are so easy to follow and actually delicious."</blockquote>
+      <div class="testi-author">
+        <div class="testi-avatar">👩</div>
+        <div>
+          <div class="testi-name">Priya Sharma</div>
+          <div class="testi-role">Marketing Manager, Bangalore</div>
+        </div>
+      </div>
+    </div>
+    <div class="testi-card">
+      <div class="stars">★★★★★</div>
+      <blockquote>"As an athlete I was sceptical, but the high-protein plan genuinely improved my recovery times. Love the app."</blockquote>
+      <div class="testi-author">
+        <div class="testi-avatar">🧑‍🦱</div>
+        <div>
+          <div class="testi-name">Arjun Mehta</div>
+          <div class="testi-role">Competitive Cyclist, Pune</div>
+        </div>
+      </div>
+    </div>
+    <div class="testi-card">
+      <div class="stars">★★★★★</div>
+      <blockquote>"The anti-inflammatory plan cleared my skin, reduced my joint pain, and gave me more energy than I've had in years."</blockquote>
+      <div class="testi-author">
+        <div class="testi-avatar">👩‍🦳</div>
+        <div>
+          <div class="testi-name">Kavitha Nair</div>
+          <div class="testi-role">Yoga Instructor, Chennai</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="section-label" style="margin: 0 auto 20px;">🥗 Limited time — first month free</div>
+  <h2 class="section-title">Ready to transform<br>how you eat?</h2>
+  <p class="section-sub">Join 50,000+ people who've discovered the joy of eating well. No calorie counting. No boring food.</p>
+  <div class="cta-actions">
+    <a href="#" class="btn-primary">Start free trial</a>
+    <a href="#" class="btn-outline">View all plans</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-brand">
+    <div class="logo">
+      <div class="logo-dot"></div>
+      Nutri<span>Life</span>
+    </div>
+    <p>Evidence-based nutrition plans built by registered dietitians, for real people.</p>
+  </div>
+  <div class="footer-col">
+    <h5>Plans</h5>
+    <ul>
+      <li><a href="#">Green Vitality</a></li>
+      <li><a href="#">Balanced Boost</a></li>
+      <li><a href="#">Muscle & Fuel</a></li>
+      <li><a href="#">Keto Clarity</a></li>
+    </ul>
+  </div>
+  <div class="footer-col">
+    <h5>Explore</h5>
+    <ul>
+      <li><a href="#">Recipe Library</a></li>
+      <li><a href="#">Meal Planner</a></li>
+      <li><a href="#">Nutrition Blog</a></li>
+      <li><a href="#">Community</a></li>
+    </ul>
+  </div>
+  <div class="footer-col">
+    <h5>Company</h5>
+    <ul>
+      <li><a href="#">About Us</a></li>
+      <li><a href="#">Our Dietitians</a></li>
+      <li><a href="#">Careers</a></li>
+      <li><a href="#">Contact</a></li>
+    </ul>
+  </div>
+</footer>
+<div class="footer-bottom">
+  <span>© 2026 NutriLife. All rights reserved.</span>
+  <span>Privacy Policy · Terms · Cookie Settings</span>
+</div>
+
+<script>
+  // Scroll-triggered fade-in
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.style.opacity = '1';
+        e.target.style.transform = 'translateY(0)';
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.plan-card, .step, .recipe-card, .testi-card').forEach(el => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(24px)';
+    el.style.transition = 'opacity .5s ease, transform .5s ease';
+    observer.observe(el);
+  });
+</script>
+</body>
+</html>
